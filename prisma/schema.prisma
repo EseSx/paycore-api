@@ -1,13 +1,31 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// ===== Empiezo creando un modelo de datos básico =====
 
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
-generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+// Modelo de usuario con campos básicos y una relación con el modelo Account
+model User {
+  id           Int       @id @default(autoincrement()) // Identificador único del usuario
+  email        String    @unique // Correo electrónico del usuario, debe ser único
+  passwordHash String // Hash de la contraseña del usuario
+  createdAt    DateTime  @default(now()) // Fecha de creación del usuario
+  accounts     Account[] // Relación uno a muchos con el modelo Account
 }
 
-datasource db {
-  provider = "mysql"
+// Modelo de cuenta con campos básicos, una relación con el modelo User y Transaction
+model Account {
+  id           Int           @id @default(autoincrement()) // Identificador único de la cuenta
+  balance      Float         @default(0.0) // Saldo de la cuenta, con un valor por defecto de 0.0
+  userId       Int // Campo que referencia al usuario propietario de la cuenta
+  user         User          @relation(fields: [userId], references: [id]) // Relación con el modelo User
+  transactions Transaction[] // Relación uno a muchos con el modelo Transaction
+}
+
+// Modelo de transacción con campos básicos y una relación con el modelo Account
+model Transaction {
+  id        Int      @id @default(autoincrement()) // Identificador único de la transacción
+  amount    Float // Monto de la transacción
+  type      String // Tipo de transacción (por ejemplo, "deposit", "withdrawal")
+  accountId Int // Campo que referencia a la cuenta asociada a la transacción
+  account   Account  @relation(fields: [accountId], references: [id]) // Relación
+  createdAt DateTime @default(now()) // Fecha de creación de la transacción
+
+  @@index([accountId, createdAt]) // Índice compuesto para optimizar consultas por cuenta y fecha
 }
