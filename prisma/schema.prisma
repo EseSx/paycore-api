@@ -1,3 +1,13 @@
+// Configuración de la fuente de datos para Prisma, especificando el proveedor de la base de datos y la URL de conexión
+datasource db {
+  provider = "mysql" // Proveedor de la base de datos, en este caso MySQL
+}
+
+// Configuración del generador de cliente Prisma para JavaScript
+generator client {
+  provider = "prisma-client-js" // Proveedor del cliente Prisma, en este caso JavaScript
+}
+
 // ===== Empiezo creando un modelo de datos básico =====
 
 // Modelo de usuario con campos básicos y una relación con el modelo Account
