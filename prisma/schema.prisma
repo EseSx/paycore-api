@@ -8,15 +8,14 @@ generator client {
   provider = "prisma-client-js" // Proveedor del cliente Prisma, en este caso JavaScript
 }
 
-// ===== Empiezo creando un modelo de datos básico =====
-
 // Modelo de usuario con campos básicos y una relación con el modelo Account
 model User {
-  id           Int       @id @default(autoincrement()) // Identificador único del usuario
-  email        String    @unique // Correo electrónico del usuario, debe ser único
-  passwordHash String // Hash de la contraseña del usuario
-  createdAt    DateTime  @default(now()) // Fecha de creación del usuario
-  accounts     Account[] // Relación uno a muchos con el modelo Account
+  id            Int            @id @default(autoincrement()) // Identificador único del usuario
+  email         String         @unique // Correo electrónico del usuario, debe ser único
+  passwordHash  String // Hash de la contraseña del usuario
+  createdAt     DateTime       @default(now()) // Fecha de creación del usuario
+  accounts      Account[] // Relación uno a muchos con el modelo Account
+  refreshTokens RefreshToken[]
 }
 
 // Modelo de cuenta con campos básicos, una relación con el modelo User y Transaction
@@ -38,4 +37,17 @@ model Transaction {
   createdAt DateTime @default(now()) // Fecha de creación de la transacción
 
   @@index([accountId, createdAt]) // Índice compuesto para optimizar consultas por cuenta y fecha
+}
+
+// Modelo de token de actualización con campos básicos y una relación con el modelo User
+model RefreshToken {
+  id        Int      @id @default(autoincrement()) // Identificador único del token de actualización
+  token     String   @unique @db.VarChar(500) // Token de actualización, debe ser único y con un tamaño máximo de 500 caracteres
+  userId    Int // Campo que referencia al usuario propietario del token de actualización
+  user      User     @relation(fields: [userId], references: [id]) // Relación con el modelo User
+  expiresAt DateTime // Fecha de expiración del token de actualización
+  revoked   Boolean  @default(false) // Indica si el token de actualización ha sido revocado
+  createdAt DateTime @default(now()) // Fecha de creación del token de actualización
+
+  @@index([userId]) // Índice para optimizar consultas por usuario
 }
