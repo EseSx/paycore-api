@@ -26,10 +26,12 @@ export const signRefreshToken = (payload: TokenPayload): string => {
   });
 };
 
+// Función para verificar un token de acceso JWT y devolver su payload si es válido
 export const verifyAccessToken = (token: string): TokenPayload => {
   return jwt.verify(token, ACCESS_SECRET) as TokenPayload;
 };
 
+// Función para verificar un token de actualización JWT y devolver su payload si es válido
 export const verifyRefreshToken = (token: string): TokenPayload => {
   return jwt.verify(token, REFRESH_SECRET) as TokenPayload;
 };
