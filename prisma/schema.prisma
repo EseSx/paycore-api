@@ -15,13 +15,13 @@ model User {
   passwordHash  String // Hash de la contraseña del usuario
   createdAt     DateTime       @default(now()) // Fecha de creación del usuario
   accounts      Account[] // Relación uno a muchos con el modelo Account
-  refreshTokens RefreshToken[]
+  refreshTokens RefreshToken[] // Relación uno a muchos con el modelo RefreshToken
 }
 
 // Modelo de cuenta con campos básicos, una relación con el modelo User y Transaction
 model Account {
   id           Int           @id @default(autoincrement()) // Identificador único de la cuenta
-  balance      Float         @default(0.0) // Saldo de la cuenta, con un valor por defecto de 0.0
+  balance      Decimal       @default(0.00) @db.Decimal(12, 2) // Saldo de la cuenta, con un valor predeterminado de 0.00 y precisión decimal de 12 dígitos y 2 decimales
   userId       Int // Campo que referencia al usuario propietario de la cuenta
   user         User          @relation(fields: [userId], references: [id]) // Relación con el modelo User
   transactions Transaction[] // Relación uno a muchos con el modelo Transaction
@@ -30,7 +30,7 @@ model Account {
 // Modelo de transacción con campos básicos y una relación con el modelo Account
 model Transaction {
   id        Int      @id @default(autoincrement()) // Identificador único de la transacción
-  amount    Float // Monto de la transacción
+  amount    Decimal  @db.Decimal(12, 2) // Monto de la transacción
   type      String // Tipo de transacción (por ejemplo, "deposit", "withdrawal")
   accountId Int // Campo que referencia a la cuenta asociada a la transacción
   account   Account  @relation(fields: [accountId], references: [id]) // Relación
