@@ -3,6 +3,7 @@ import express from "express";
 import helmet from "helmet";
 import cors from "cors";
 import authRoutes from "./modules/auth/auth.routes";
+import accountsRoutes from "./modules/accounts/accounts.routes";
 
 // Creación de una instancia de la aplicación Express
 const app = express();
@@ -16,6 +17,7 @@ app.use(express.json());
 app.get("/health", (_req, res) => res.json({ status: "ok" }));
 
 app.use("/api/auth", authRoutes);
+app.use("/api/accounts", accountsRoutes);
 
 // Exportación de la instancia de la aplicación Express para su uso en otros módulos
 export default app;

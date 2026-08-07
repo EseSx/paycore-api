@@ -18,6 +18,8 @@ export const requireAuth = (
 
   const token = authHeader.split(" ")[1];
 
+  if (!token) return res.status(401).json({ error: "Token no provisto" });
+
   try {
     req.user = verifyAccessToken(token);
     next();
