@@ -24,6 +24,11 @@ export const createTransactionHandler = async (
     if (err instanceof Error && err.message === "INSUFFICIENT_FUNDS") {
       return res.status(422).json({ error: "Fondos insuficientes" });
     }
+    if (err instanceof Error && err.message === "PAYMENT_GATEWAY_DECLINED") {
+      return res
+        .status(502)
+        .json({ error: "Pasarela de pago no disponible, intenta más tarde" });
+    }
     return res.status(500).json({ error: "Error interno" });
   }
 };
