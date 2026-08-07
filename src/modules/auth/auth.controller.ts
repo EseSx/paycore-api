@@ -10,12 +10,12 @@ export const registerHandler = async (req: Request, res: Response) => {
 
   try {
     const tokens = await authService.register(parsed.data);
-    res.status(201).json(tokens);
+    return res.status(201).json(tokens);
   } catch (err) {
     if (err instanceof Error && err.message === "EMAIL_ALREADY_EXISTS")
-      return res.status(409).json({ error: "El email ya esta registrado" });
+      return res.status(409).json({ error: "El email ya está registrado" });
+    return res.status(500).json({ error: "Error interno" });
   }
-  res.status(500).json({ error: "Error interno" });
 };
 
 export const loginHandler = async (req: Request, res: Response) => {
