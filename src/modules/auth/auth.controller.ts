@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { registerSchema, loginSchema } from "./auth.schemas";
 import * as authService from "./auth.service";
-import { error } from "node:console";
 
+// POST /api/auth/register
 export const registerHandler = async (req: Request, res: Response) => {
   const parsed = registerSchema.safeParse(req.body);
   if (!parsed.success)
@@ -14,10 +14,12 @@ export const registerHandler = async (req: Request, res: Response) => {
   } catch (err) {
     if (err instanceof Error && err.message === "EMAIL_ALREADY_EXISTS")
       return res.status(409).json({ error: "El email ya está registrado" });
+    // Cualquier otro error inesperado (ej. falla de conexión a la DB).
     return res.status(500).json({ error: "Error interno" });
   }
 };
 
+// POST /api/auth/login
 export const loginHandler = async (req: Request, res: Response) => {
   const parsed = loginSchema.safeParse(req.body);
 
@@ -35,6 +37,7 @@ export const loginHandler = async (req: Request, res: Response) => {
   }
 };
 
+// POST /api/auth/refresh — canjea un refresh token por un access token nuevo
 export const refreshHandler = async (req: Request, res: Response) => {
   const { refreshToken } = req.body;
   if (!refreshToken)
@@ -44,10 +47,11 @@ export const refreshHandler = async (req: Request, res: Response) => {
     const result = await authService.refresh(refreshToken);
     res.status(200).json(result);
   } catch {
-    res.status(401).json({ error: "Refresh token inválido" });
+    return res.status(401).json({ error: "Refresh token inválido" });
   }
 };
 
+// POST /api/auth/logout — revoca el refresh token recibido
 export const logoutHandler = async (req: Request, res: Response) => {
   const { refreshToken } = req.body;
   if (refreshToken) await authService.logout(refreshToken);
