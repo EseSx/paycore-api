@@ -2,9 +2,10 @@ import CircuitBreaker from "opossum";
 import { callExternalGateway } from "./paymentGateway";
 
 const options = {
-  timeout: 3000, // si tarda más de 3s, lo considera falla
-  errorThresholdPercentage: 50, // abre el circuito si falla el 50% de los últimos calls
-  resetTimeout: 10000, // después de 10s en estado "abierto", prueba de nuevo (half-open)
+  timeout: 3000,
+  errorThresholdPercentage: 50,
+  resetTimeout: 3000, // bajado a 3s solo para poder ver la recuperación en el test
+  volumeThreshold: 5, // necesita al menos 5 llamadas antes de evaluar el % de error
 };
 
 const breaker = new CircuitBreaker(callExternalGateway, options);
