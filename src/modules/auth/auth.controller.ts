@@ -3,7 +3,7 @@ import { registerSchema, loginSchema } from "./auth.schemas";
 import * as authService from "./auth.service";
 import { error } from "node:console";
 
-export const registerHandle = async (req: Request, res: Response) => {
+export const registerHandler = async (req: Request, res: Response) => {
   const parsed = registerSchema.safeParse(req.body);
   if (!parsed.success)
     return res.status(400).json({ error: parsed.error.flatten() });
