@@ -10,7 +10,7 @@ export const createAccount = async (
   });
 };
 
-export const getUserAccount = async (userId: number) => {
+export const getUserAccounts = async (userId: number) => {
   return prisma.account.findMany({
     where: { userId },
     orderBy: { id: "asc" },
