@@ -1,6 +1,7 @@
 import { prisma } from "../../config/prisma";
 import { createAccountInput } from "./accounts.schemas";
 
+// Crea una cuenta asociada al usuario autenticado.
 export const createAccount = async (
   userId: number,
   data: createAccountInput,
@@ -10,6 +11,7 @@ export const createAccount = async (
   });
 };
 
+// Lista todas las cuentas del usuario autenticado.
 export const getUserAccounts = async (userId: number) => {
   return prisma.account.findMany({
     where: { userId },
@@ -17,6 +19,9 @@ export const getUserAccounts = async (userId: number) => {
   });
 };
 
+// Busca una cuenta puntual, filtrando SIEMPRE por userId además del id.
+// Esto previene que un usuario autenticado acceda a la cuenta de otro
+// con solo adivinar/incrementar el ID (vulnerabilidad tipo IDOR).
 export const getAccountById = async (userId: number, accountId: number) => {
   const account = await prisma.account.findFirst({
     where: { id: accountId, userId },

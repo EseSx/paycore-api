@@ -7,6 +7,7 @@ import {
 
 const router = Router();
 
+// Todas las rutas de este módulo requieren estar autenticado.
 router.use(requireAuth);
 
 router.post("/", createTransactionHandler);
