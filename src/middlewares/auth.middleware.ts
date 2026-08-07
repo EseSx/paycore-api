@@ -3,7 +3,7 @@ import { verifyAccessToken } from "../utils/jwt";
 import { error } from "node:console";
 
 export interface AuthRequest extends Request {
-  user?: { userId: number; email: string };
+  user?: { userId: string; email: string };
 }
 
 export const requireAuth = (
