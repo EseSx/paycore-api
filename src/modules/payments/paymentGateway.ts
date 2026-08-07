@@ -6,7 +6,7 @@ export const callExternalGateway = async (
   await new Promise((resolve) => setTimeout(resolve, 200));
 
   // Simula fallas aleatorias ~30% del tiempo (timeout / servicio caído)
-  if (Math.random() < 0.3) {
+  if (Math.random() < 0.7) {
     throw new Error("GATEWAY_TIMEOUT");
   }
 
