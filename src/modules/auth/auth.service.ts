@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../../config/prisma";
 import { hashPassword, comparePassword } from "../../utils/password";
 import {
   signAccessToken,
@@ -6,10 +6,6 @@ import {
   verifyRefreshToken,
 } from "../../utils/jwt";
 import { RegisterInput, LoginInput } from "./auth.schemas";
-import { date, email } from "zod";
-import { error } from "node:console";
-
-const prisma = new PrismaClient();
 
 export const register = async (data: RegisterInput) => {
   const existing = await prisma.user.findUnique({
