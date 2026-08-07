@@ -16,6 +16,57 @@ API REST de gestión de pagos y transacciones, construida como proyecto de portf
 | Resiliencia | Circuit breaker (`opossum`) |
 | Dev server | ts-node-dev |
 
+## Mapa del proyecto
+```
+paycore-api
+├─ README.md
+├─ docker-compose.yml
+├─ package-lock.json
+├─ package.json
+├─ prisma
+│  ├─ migrations
+│  │  ├─ 20260719031612_init
+│  │  │  └─ migration.sql
+│  │  ├─ 20260719043313_add_refresh_tokens
+│  │  │  └─ migration.sql
+│  │  ├─ 20260807145639_fix_decimal_precision
+│  │  │  └─ migration.sql
+│  │  └─ migration_lock.toml
+│  └─ schema.prisma
+├─ prisma.config.ts
+├─ src
+│  ├─ app.ts
+│  ├─ config
+│  │  └─ prisma.ts
+│  ├─ middlewares
+│  │  └─ auth.middleware.ts
+│  ├─ modules
+│  │  ├─ accounts
+│  │  │  ├─ accounts.controller.ts
+│  │  │  ├─ accounts.routes.ts
+│  │  │  ├─ accounts.schemas.ts
+│  │  │  └─ accounts.service.ts
+│  │  ├─ auth
+│  │  │  ├─ auth.controller.ts
+│  │  │  ├─ auth.routes.ts
+│  │  │  ├─ auth.schemas.ts
+│  │  │  └─ auth.service.ts
+│  │  ├─ payments
+│  │  │  ├─ paymentBreaker.ts
+│  │  │  └─ paymentGateway.ts
+│  │  └─ transactions
+│  │     ├─ transactions.controller.ts
+│  │     ├─ transactions.routes.ts
+│  │     ├─ transactions.schemas.ts
+│  │     └─ transactions.service.ts
+│  ├─ server.ts
+│  └─ utils
+│     ├─ jwt.ts
+│     └─ password.ts
+└─ tsconfig.json
+
+```
+
 ## Arquitectura
 
 El proyecto sigue una estructura modular por dominio (no por tipo de archivo), donde cada módulo de negocio es autocontenido:
