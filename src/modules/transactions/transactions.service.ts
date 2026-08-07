@@ -1,5 +1,6 @@
 import { prisma } from "../../config/prisma";
 import { CreateTransactionInput } from "./transactions.schemas";
+import { processPayment } from "../payments/paymentBreaker";
 
 export const createTransaction = async (
   userId: number,
@@ -16,6 +17,13 @@ export const createTransaction = async (
   const newBalance = currentBalance + delta;
 
   if (newBalance < 0) throw new Error("INSUFFICIENT_FUNDS");
+
+  if (data.type === "deposit") {
+    const paymentResult = await processPayment(data.amount);
+    if (!paymentResult.approved) {
+      throw new Error("PAYMENT_GATEWAY_DECLINED");
+    }
+  }
 
   // $transaction: si falla el update, tampoco se crea la transacción — atomicidad real
   const [, transaction] = await prisma.$transaction([
